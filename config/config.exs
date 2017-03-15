@@ -28,3 +28,7 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
+
+config :telegram_tl,
+  api_id: 26553,
+  api_hash: "65748bb68bdff22b7258f17878d55823"

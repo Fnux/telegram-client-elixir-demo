@@ -1,18 +1,15 @@
 defmodule TelegramClient do
-  @moduledoc """
-  Documentation for TelegramClient.
-  """
+  @dc 4
 
-  @doc """
-  Hello world.
+  def start(_type, _args) do
+    {:ok, session_id} = MTProto.connect(@dc)
+    TelegramClient.Supervisor.start_link(session_id)
+  end
 
-  ## Examples
-
-      iex> TelegramClient.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def sign_in do
+    phone = IO.gets("Please enter your phone number :") |> String.trim
+    GenServer.call(TelegramClient.Handler, {:send_code, phone})
+    code = IO.gets("Please enter the security code") |> String.trim
+    GenServer.call(TelegramClient.Handler, {:sign_in, phone, code})
   end
 end
