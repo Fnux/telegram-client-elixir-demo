@@ -9,7 +9,7 @@ defmodule TelegramClient do
   def sign_in do
     phone = IO.gets("Please enter your phone number :") |> String.trim
     GenServer.call(TelegramClient.Handler, {:send_code, phone})
-    code = IO.gets("Please enter the security code") |> String.trim
+    code = IO.gets("Please enter the security code :") |> String.trim
     GenServer.call(TelegramClient.Handler, {:sign_in, phone, code})
   end
 end
