@@ -28,6 +28,7 @@ defmodule TelegramClient.Listener do
 
     case name do
       "updateShort" -> :noop #ignore
+      "auth.sentCode" -> :noop
       "auth.authorization" ->
         IO.puts "Received user authorization : you are now identified !"
       "updateShortMessage" ->

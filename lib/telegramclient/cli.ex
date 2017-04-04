@@ -23,6 +23,7 @@ defmodule TelegramClient.CLI do
       "dump" -> dump()
       "connect" -> connect()
       "signin" -> sign_in()
+      "contacts" -> contacts()
       "debug" -> debug()
       "help" -> print_help()
       "exit" -> System.halt()
@@ -37,6 +38,7 @@ defmodule TelegramClient.CLI do
     * dump : dump a registry (either :dc or :session)
     * connect : connect to Telegram's servers
     * signin : sign in on Telegram
+    * contacts : print the contact list
     * debug : get/set the debug level
     * help : print this message
     * exit : exit this application
@@ -87,7 +89,7 @@ defmodule TelegramClient.CLI do
       {:ok, session_id} = MTProto.connect(dc)
       IO.puts "Your session ID is #{session_id}."
       TelegramClient.Supervisor.start_link(session_id)
-      IO.puts "Wait for the authrorization key, then use the 'sign_in' command."
+      IO.puts "Wait for the authrorization key, then use the 'signin' command."
     else
       IO.puts "Error: I don't know DC##{dc} ;("
     end
@@ -104,5 +106,11 @@ defmodule TelegramClient.CLI do
     MTProto.sign_in session_id, phone, code
 
     IO.puts "Please wait for user authorization."
+  end
+
+  def contacts do
+    session_id = Registry.get :session_id
+    MTProto.send session_id, (MTProto.API.Contacts.get_contacts
+                             |> MTProto.Payload.wrap(:encrypted))
   end
 end
