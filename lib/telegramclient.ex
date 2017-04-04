@@ -1,10 +1,7 @@
 defmodule TelegramClient do
-  @dc 4
+  alias TelegramClient.CLI
 
-  def start(_type, _args) do
-    {:ok, session_id} = MTProto.connect(@dc)
-    TelegramClient.Supervisor.start_link(session_id)
-  end
+  def start(_type, _args), do: CLI.main()
 
   def sign_in do
     phone = IO.gets("Please enter your phone number :") |> String.trim

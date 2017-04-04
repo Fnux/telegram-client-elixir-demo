@@ -9,6 +9,7 @@ defmodule TelegramClient.Supervisor do
 
   def init(session_id) do
     children = [
+      worker(TelegramClient.Registry, [session_id], [restart: :permanent, id: Registry]),
       worker(TelegramClient.Handler, [session_id], [restart: :permanent, id: Handler]),
       worker(TelegramClient.Listener, [session_id], [restart: :permanent, id: Listener]),
     ]
