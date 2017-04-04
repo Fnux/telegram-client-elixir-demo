@@ -1,19 +1,36 @@
 # TelegramClient
 
-**TODO: Add description**
+A simple example for [telegram_mt](https://github.com/Fnux/telegram-mt-elixir).
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `telegramclient` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [{:telegramclient, "~> 0.1.0"}]
-end
+```
+git clone https://github.com/Fnux/telegram-client-elixir-demo
+cd telegram-client-elixir-demo
+mix deps.get
+mix compile
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/telegramclient](https://hexdocs.pm/telegramclient).
+## Usage
 
+```
+iex -S mix
+Erlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+08:46:28.821 [info]  No authorization key found for DC 4. Requesting...
+08:46:29.553 [info]  The authorization key was successfully generated.
+
+iex> import TelegramClient
+TelegramClient
+
+iex> sign_in
+Please enter your phone number :0041000000000
+
+08:47:46.997 [info]  TelegramClient received a new message : auth.sentCode
+
+Please enter the security code :00000
+
+08:48:28.482 [info]  TelegramClient received a new message : auth.authorization
+
+iex> ...
+```
