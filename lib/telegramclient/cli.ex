@@ -23,6 +23,7 @@ defmodule TelegramClient.CLI do
       "dump" -> dump()
       "connect" -> connect()
       "signin" -> sign_in()
+      "send" -> send()
       "contacts" -> contacts()
       "debug" -> debug()
       "help" -> print_help()
@@ -38,6 +39,7 @@ defmodule TelegramClient.CLI do
     * dump : dump a registry (either :dc or :session)
     * connect : connect to Telegram's servers
     * signin : sign in on Telegram
+    * send : send a message
     * contacts : print the contact list
     * debug : get/set the debug level
     * help : print this message
@@ -110,7 +112,14 @@ defmodule TelegramClient.CLI do
 
   def contacts do
     session_id = Registry.get :session_id
-    MTProto.send session_id, (MTProto.API.Contacts.get_contacts
-                             |> MTProto.Payload.wrap(:encrypted))
+    MTProto.send session_id, MTProto.API.Contacts.get_contacts
+  end
+
+  def send do
+    session_id = Registry.get :session_id
+    dst = IO.gets("Please enter the ID of the recipient : ") |> String.trim
+                                                             |> Integer.parse
+    msg = IO.gets("Message : ") |> String.trim
+    MTProto.send_message session_id, dst, msg
   end
 end

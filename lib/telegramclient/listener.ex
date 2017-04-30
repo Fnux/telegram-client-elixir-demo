@@ -37,10 +37,28 @@ defmodule TelegramClient.Listener do
       "updateShortChatMessage" ->
         %{from_id: sender, chat_id: chat, message: content} = msg
       IO.puts "New message on chat #{chat} from #{sender} : #{content}"
+      "gzip_packed" ->
+        data = Map.get(msg, :result) |> Map.get(:packed_data)
+        process_gzip_packed(data)
       _ ->
         IO.puts "-- Unknown message ! --"
         IO.inspect msg
         IO.puts "-----------------------"
+    end
+  end
+
+  defp process_gzip_packed(data) do
+    if :users in Map.keys(data) do
+      IO.puts "*** Received contact list ***"
+      users = Map.get(data, :users)
+      for user <- users do
+        id = Map.get(user, :id)
+        name = Map.get(user, :first_name) <> Map.get(user, :last_name)
+        username = Map.get(user, :username)
+        phone = Map.get(user, :phone)
+
+        IO.puts "User ##{id} : #{name} - @#{username} - #{phone}"
+      end
     end
   end
 
