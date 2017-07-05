@@ -8,7 +8,7 @@ defmodule TelegramClient.Registry do
     Registry.register(@name, :session_id, session_id)
   end
 
-  def keys, do: Registry.keys(@name, self)
+  def keys, do: Registry.keys(@name, self())
 
   def set(key, value) do
     Registry.register(@name, key, value)

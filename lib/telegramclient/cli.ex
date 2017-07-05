@@ -5,7 +5,7 @@ defmodule TelegramClient.CLI do
   @dcs [1,2,3,4,5]
   @debug [:debug, :info, :warn, :error]
 
-  def main do
+  def main(_) do
     IO.puts "Welcome abord `telegram-client-elixir-demo` !"
     IO.puts "Type `help` for the available commands."
     loop()

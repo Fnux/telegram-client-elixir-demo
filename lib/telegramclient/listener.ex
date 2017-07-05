@@ -14,7 +14,7 @@ defmodule TelegramClient.Listener do
     {:ok, nil}
   end
 
-  def handle_info({:recv, _session_id, msg}, state) do
+  def handle_info({:tg, _session_id, msg}, state) do
     dispatch(msg)
     {:noreply, state}
   end

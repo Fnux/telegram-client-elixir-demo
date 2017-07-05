@@ -7,6 +7,7 @@ defmodule TelegramClient.Mixfile do
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     escript: [main_module: TelegramClient],
      deps: deps()]
   end
 
@@ -15,7 +16,7 @@ defmodule TelegramClient.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger],
+    [extra_applications: [:logger, :telegram_tl],
     mod: []]
   end
 
@@ -29,6 +30,6 @@ defmodule TelegramClient.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:telegram_mt, "~> 0.0.1-alpha"}]
+    [{:telegram_mt, github: "fnux/telegram-mt-elixir"}]
   end
 end
