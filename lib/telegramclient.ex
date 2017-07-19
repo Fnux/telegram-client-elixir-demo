@@ -1,11 +1,12 @@
 defmodule TelegramClient do
-  alias TelegramClient.CLI
-
   def main(args \\ []) do
     # Launch telegram client
     MTProto.start()
 
+    # Launch client supervisor
+    TelegramClient.Supervisor.start_link()
+
     # Start CLI
-    CLI.main(args)
+    TelegramClient.CLI.main(args)
   end
 end

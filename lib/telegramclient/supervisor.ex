@@ -3,17 +3,26 @@ defmodule TelegramClient.Supervisor do
 
   @name TelegramClient.Supervisor
 
-  def start_link(session_id) do
-    Supervisor.start_link(__MODULE__, session_id, name: @name)
+  def start_link() do
+    Supervisor.start_link(__MODULE__, [], name: @name)
   end
 
-  def init(session_id) do
+  def init(_) do
     children = [
-      worker(TelegramClient.Registry, [session_id], [restart: :permanent, id: Registry]),
-      worker(TelegramClient.Handler, [session_id], [restart: :permanent, id: Handler]),
-      worker(TelegramClient.Listener, [session_id], [restart: :permanent, id: Listener]),
+      worker(TelegramClient.Registry, [], [restart: :permanent, id: Registry])
     ]
 
     supervise(children, strategy: :one_for_one)
+  end
+
+  def start_listener() do
+    listener = worker(TelegramClient.Listener, [], [restart: :permanent, id: Listener])
+    Supervisor.start_child @name, listener
+  end
+
+  def exit() do
+    Supervisor.terminate_child @name, Listener
+    Supervisor.terminate_child @name, Registry
+    Supervisor.stop(@name)
   end
 end

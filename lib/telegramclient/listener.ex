@@ -4,12 +4,13 @@ defmodule TelegramClient.Listener do
 
   @name TelegramClient.Listener
 
-  def start_link(session_id) do
-    GenServer.start_link(__MODULE__, session_id, name: @name)
+  def start_link() do
+    GenServer.start_link(__MODULE__, [], name: @name)
   end
 
-  def init(session_id) do
+  def init(_) do
     # Register on telegram_mt
+    session_id = TelegramClient.Registry.get().session_id
     Session.set_client session_id, self()
     {:ok, nil}
   end
@@ -28,18 +29,30 @@ defmodule TelegramClient.Listener do
 
     case name do
       "updateShort" -> :noop #ignore
-      "auth.sentCode" -> :noop
+      "auth.sentCode" ->
+        IO.puts "Validation code sent !"
       "auth.authorization" ->
         IO.puts "Received user authorization : you are now identified !"
       "updateShortMessage" ->
         %{from_id: sender, message: content} = msg
-      IO.puts "New message from #{sender} : #{content}"
+        IO.puts "New message from #{sender} : #{content}"
       "updateShortChatMessage" ->
         %{from_id: sender, chat_id: chat, message: content} = msg
-      IO.puts "New message on chat #{chat} from #{sender} : #{content}"
+        IO.puts "New message on chat #{chat} from #{sender} : #{content}"
       "gzip_packed" ->
         data = Map.get(msg, :result) |> Map.get(:packed_data)
         process_gzip_packed(data)
+      "new_session_created" ->
+        IO.puts "New Telegram session created !"
+      "msg_container" ->
+        contained = Map.get(msg, :messages)
+        for msg <- contained do
+          dispatch(msg)
+        end
+      "message" ->
+        body = Map.get(msg, :body)
+        dispatch(body)
+      "msgs_ack" -> :noop #ignore
       _ ->
         IO.puts "-- Unknown message ! --"
         IO.inspect msg

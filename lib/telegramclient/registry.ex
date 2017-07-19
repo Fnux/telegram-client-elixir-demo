@@ -3,23 +3,36 @@ defmodule TelegramClient.Registry do
 
   @name __MODULE__
 
-  def start_link(session_id) do
-    Registry.start_link(:unique, @name)
-    Registry.register(@name, :session_id, session_id)
+  defstruct session_id: nil
+
+  def start_link() do
+    GenServer.start_link(__MODULE__, [], name: @name)
   end
 
-  def keys, do: Registry.keys(@name, self())
+  def init(_) do
+    state = struct(__MODULE__)
 
-  def set(key, value) do
-    Registry.register(@name, key, value)
+    {:ok, state}
   end
 
-  def drop(key) do
-    Registry.unregister(@name, key)
+  ###
+
+  def handle_call(:get, _from, state) do
+    {:reply, state, state}
   end
 
-  def get(key) do
-    {_, value} = Registry.lookup(@name, key) |> List.first
-    value
+  def handle_call({:update, change}, _from, state) do
+    updated = struct(state, change)
+    {:reply, updated, updated}
+  end
+
+  ###
+
+  def get() do
+    GenServer.call(@name, :get)
+  end
+
+  def update(change) do
+    GenServer.call(@name, {:update, change})
   end
 end
