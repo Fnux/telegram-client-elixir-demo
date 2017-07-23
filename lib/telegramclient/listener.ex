@@ -41,7 +41,13 @@ defmodule TelegramClient.Listener do
         IO.puts "New message on chat #{chat} from #{sender} : #{content}"
       "gzip_packed" ->
         data = Map.get(msg, :result) |> Map.get(:packed_data)
-        process_gzip_packed(data)
+        dispatch(data)
+      "contacts.contacts" ->
+        process_contacts(msg)
+      "messages.dialogs" ->
+        process_dialogs(msg)
+      "messages.dialogsSlice" ->
+        process_dialogs(msg)
       "new_session_created" ->
         IO.puts "New Telegram session created !"
       "msg_container" ->
@@ -55,22 +61,29 @@ defmodule TelegramClient.Listener do
       "msgs_ack" -> :noop #ignore
       _ ->
         IO.puts "-- Unknown message ! --"
-        IO.inspect msg
+        IO.inspect Map.get(msg, :name)
+        IO.inspect msg, limit: :infinity
         IO.puts "-----------------------"
     end
   end
 
-  defp process_gzip_packed(data) do
-    if :users in Map.keys(data) do
-      IO.puts "*** Received contact list ***"
-      users = Map.get(data, :users)
-      for user <- users do
-        id = Map.get(user, :id)
-        name = Map.get(user, :first_name) <> Map.get(user, :last_name)
-        username = Map.get(user, :username)
-        phone = Map.get(user, :phone)
+  defp process_contacts(data) do
+    IO.puts "*** Received contact list ***"
+    users = Map.get(data, :users)
+    for user <- users do
+      id = Map.get(user, :id)
+      name = Map.get(user, :first_name) <> Map.get(user, :last_name)
+      username = Map.get(user, :username)
+      phone = Map.get(user, :phone)
 
-        IO.puts "User ##{id} : #{name} - @#{username} - #{phone}"
+      IO.puts "User ##{id} : #{name} - @#{username} - #{phone}"
+    end
+  end
+
+  def process_dialogs(msg) do
+    for chat <- msg.chats do
+      if chat.name == "chat" do
+        IO.puts "Chat id##{chat.id} : #{chat.title}"
       end
     end
   end

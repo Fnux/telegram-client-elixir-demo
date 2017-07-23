@@ -26,9 +26,10 @@ defmodule TelegramClient.CLI do
       "signin" -> sign_in()
       "signup" -> sign_up()
       "send" -> send()
-      "contacts" -> contacts()
+      "contacts" -> get_contacts()
+      "chats" -> get_chats()
       "debug" -> debug()
-      "gen-authkey" -> gen_authkey()
+      "akgen" -> gen_authkey()
       "export" -> export_session()
       "import" -> import_session()
       "help" -> print_help()
@@ -49,7 +50,7 @@ defmodule TelegramClient.CLI do
     * send : send a message
     * contacts : print the contact list
     * chats : print the chats list
-    * gen-authkey : generate the authorization key
+    * akgen : generate the authorization key
     * export : export session parameters
     * import : import session parameters
     * exit : exit this application
@@ -125,9 +126,14 @@ defmodule TelegramClient.CLI do
     MTProto.Session.send session_id, query
   end
 
-  def contacts do
+  def get_contacts do
     session_id = Registry.get().session_id
     MTProto.send session_id, MTProto.API.Contacts.get_contacts
+  end
+
+  def get_chats do
+    session_id = Registry.get().session_id
+    MTProto.send session_id, MTProto.API.Messages.get_dialogs(0,0,1000)
   end
 
   def send do
