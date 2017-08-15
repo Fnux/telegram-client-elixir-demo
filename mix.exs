@@ -30,6 +30,6 @@ defmodule TelegramClient.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:telegram_mt, github: "fnux/telegram-mt-elixir"}]
+    [{:telegram_mt, "~> 0.1.0-alpha"}]
   end
 end

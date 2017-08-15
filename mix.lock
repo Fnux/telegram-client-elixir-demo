@@ -1,5 +1,5 @@
 %{"earmark": {:hex, :earmark, "1.2.0", "bf1ce17aea43ab62f6943b97bd6e3dc032ce45d4f787504e3adf738e54b42f3a", [:mix], []},
   "json": {:hex, :json, "1.0.0", "4824dadb01e14395f65e9d18da294d534326d7eed77996f3c22f74a9870179eb", [:mix], [{:earmark, ">= 0.0.0", [hex: :earmark, optional: false]}]},
-  "poison": {:hex, :poison, "3.1.0", "d9eb636610e096f86f25d9a46f35a9facac35609a7591b3be3326e99a0484665", [:mix], []},
-  "telegram_mt": {:git, "https://github.com/fnux/telegram-mt-elixir.git", "e74d73a81599539370cc6bcc7e7d262f17831d6c", []},
-  "telegram_tl": {:git, "https://github.com/fnux/telegram-tl-elixir.git", "937b46f9924da1eced05c36afcb970790a7593ec", []}}
+  "poison": {:hex, :poison, "3.1.0", "d9eb636610e096f86f25d9a46f35a9facac35609a7591b3be3326e99a0484665", [:mix], [], "hexpm"},
+  "telegram_mt": {:hex, :telegram_mt, "0.1.0-alpha", "2379097f72039b5a1bce5c397d8dfe7883c6f8e6378948462095f99ac986f2f4", [:mix], [{:telegram_tl, "~> 0.2.0-beta", [hex: :telegram_tl, repo: "hexpm", optional: false]}], "hexpm"},
+  "telegram_tl": {:hex, :telegram_tl, "0.2.0-beta", "1431a7b46c2631a6992fbc7c41650955d0029b1c74498b37c20b006d0ac92ed4", [:mix], [{:poison, "~> 3.1", [hex: :poison, repo: "hexpm", optional: false]}], "hexpm"}}

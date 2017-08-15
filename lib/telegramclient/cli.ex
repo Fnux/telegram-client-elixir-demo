@@ -150,7 +150,7 @@ defmodule TelegramClient.CLI do
 
     session_id = Registry.get().session_id
     {user_id, auth_key, server_salt} = MTProto.Session.export(session_id)
-    export = Integer.to_string(user_id) <> ";;" <> auth_key <> ";;" <> Integer.to_string(server_salt)
+    export = Integer.to_string(user_id) <> ";;" <> auth_key <> ";;" <> server_salt
 
     IO.puts "Writing to #{@export}..."
     {:ok, file} = File.open @export, [:write]
@@ -169,7 +169,7 @@ defmodule TelegramClient.CLI do
       session_id,
       String.to_integer(user_id),
       auth_key,
-      String.to_integer(server_salt)
+      server_salt
     )
   end
 
