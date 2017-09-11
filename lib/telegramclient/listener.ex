@@ -12,11 +12,17 @@ defmodule TelegramClient.Listener do
     # Register on telegram_mt
     session_id = TelegramClient.Registry.get().session_id
     Session.set_client session_id, self()
-    {:ok, nil}
+    {:ok, session_id}
   end
 
   def handle_info({:tg, _session_id, msg}, state) do
     dispatch(msg)
+    {:noreply, state}
+  end
+
+  def handle_info(:auth_key_generated, state) do
+    IO.puts "Authorization key generated !"
+
     {:noreply, state}
   end
 
